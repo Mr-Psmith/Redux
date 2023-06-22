@@ -1,4 +1,4 @@
-import redux from redux; //or we can import {createStore} exactly
+import {createStore} from "redux"; //or we can import {createStore} exactly
 
 const reducer = (state = {counter: 0}, action) => {
 
@@ -18,7 +18,7 @@ const reducer = (state = {counter: 0}, action) => {
 
 };
 
-const store = redux.createStore(reducer);
+const store = createStore(reducer);
 
 store.dispatch({ type: "increment" });
 store.dispatch({ type: "decrement" });
