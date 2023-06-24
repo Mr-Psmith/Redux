@@ -1,5 +1,5 @@
 import {createStore} from "redux"; //or we can import {createStore} exactly
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, configureStore } from "@reduxjs/toolkit";
 
 const initialState = { counter: 0, showCounter: true}; //easier to read
 
@@ -22,41 +22,46 @@ const counterSlice = createSlice({
     }
 });
 
-const reducer = (state = initialState, action) => {
+// const reducer = (state = initialState, action) => {
 
-    if (action.type === "increment") {
-        return{
-        counter: state.counter +1,
-        showCounter: state.showCounter // have to set it, so we set to the value we currently having
-        };
-    }
-    if (action.type === "increase") {
-        return {
-            counter: state.counter + action.valueProp,
-            showCounter: state.showCounter
-    }
-    }
+//     if (action.type === "increment") {
+//         return{
+//         counter: state.counter +1,
+//         showCounter: state.showCounter // have to set it, so we set to the value we currently having
+//         };
+//     }
+//     if (action.type === "increase") {
+//         return {
+//             counter: state.counter + action.valueProp,
+//             showCounter: state.showCounter
+//     }
+//     }
 
-    if (action.type === "decrement") {
-        return{
-        counter: state.counter -1,
-        showCounter: state.showCounter
-        };
-    }
+//     if (action.type === "decrement") {
+//         return{
+//         counter: state.counter -1,
+//         showCounter: state.showCounter
+//         };
+//     }
 
-    if (action.type === "toggle") {
-        return {
-            showCounter: !state.showCounter, // we are setting it this way the opposite it was, so if it was true we are setting it false, and vica versa
-            counter:state.counter
-        };
-    }
+//     if (action.type === "toggle") {
+//         return {
+//             showCounter: !state.showCounter, // we are setting it this way the opposite it was, so if it was true we are setting it false, and vica versa
+//             counter:state.counter
+//         };
+//     }
 
-    return state;
+//     return state;
 
 
-};
+// };
 
-const store = createStore(reducer);
+//const store = createStore(counterSlice.reducer); //This would be good this way for a smaller app.
+//But if we have a bigger app with multiple stateslices, than we would have a problem as there can be only one reducer passed to create store
+const store = configureStore({ //we pass a configuration obj, - which is expected. And then we set a reducer property => expected property by configureStore.
+    reducer: counterSlice.reducer // if we would have multiple state slices (bigger app), we would sert an obj with any keys of our choice and the values of those properties would then be different reducer functions.
+                                        //So we would create a map of reducers you could say, and this map is then set as a value for the main reducer and behind the scenes configureStore will emerge all those reducers into one big reducer. So it will merge them for us.
+}); 
 
 store.dispatch({ type: "increment" });
 store.dispatch({ type: "decrement" });
